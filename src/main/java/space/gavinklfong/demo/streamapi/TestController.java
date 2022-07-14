@@ -56,4 +56,6 @@ public class TestController {
     public Optional<ProductDTO> cheapestBook(){return serviceE1.getCheapestBook();}
     @GetMapping("/ex6")
     public List<OrderDTO> threeMostRecentOrders(){return serviceE1.getThreeMostRecentOrders();}
+    @GetMapping("/ex7")
+    public List<ProductDTO> getProductsFromOrdersOn15March(){return serviceE1.getProductsFromOrdersFromMarch15();}
 }

@@ -79,4 +79,14 @@ public class ServiceE1 {
             .map(OrderDTO::orderToDTO)
             .collect(Collectors.toList());
   }
+  public List<ProductDTO> getProductsFromOrdersFromMarch15()
+  {
+    return orderRepo.findAll().stream()
+            .filter(order -> order.getOrderDate().isEqual(LocalDate.of(2021,3,15)))
+            .peek(System.out::println)
+            .flatMap(order -> order.getProducts().stream())
+            .distinct()
+            .map(ProductDTO::productToDTO)
+            .collect(Collectors.toList());
+  }
 }
