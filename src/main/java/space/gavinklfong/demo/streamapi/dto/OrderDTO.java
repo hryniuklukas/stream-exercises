@@ -3,20 +3,30 @@ package space.gavinklfong.demo.streamapi.dto;
 
 import space.gavinklfong.demo.streamapi.models.Customer;
 import space.gavinklfong.demo.streamapi.models.Order;
-import space.gavinklfong.demo.streamapi.models.Product;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OrderDTO {
     private String status;
     private Customer customer;
+    private LocalDate orderDate;
     Set<ProductDTO> products;
-    public OrderDTO(String status, Customer customer, Set<ProductDTO> products)
+    public OrderDTO(String status, Customer customer, Set<ProductDTO> products, LocalDate orderDate)
     {
         this.status = status;
         this.customer = customer;
         this.products = products;
+        this.orderDate = orderDate;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getStatus() {
@@ -48,6 +58,6 @@ public class OrderDTO {
         return new OrderDTO(order.getStatus(), order.getCustomer(),
                 order.getProducts().stream()
                 .map(ProductDTO::productToDTO)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toSet()), order.getOrderDate());
     }
 }

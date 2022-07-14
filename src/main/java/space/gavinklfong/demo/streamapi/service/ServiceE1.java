@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 import space.gavinklfong.demo.streamapi.dto.OrderDTO;
 import space.gavinklfong.demo.streamapi.dto.ProductDTO;
 import space.gavinklfong.demo.streamapi.models.Order;
+import space.gavinklfong.demo.streamapi.models.Product;
 import space.gavinklfong.demo.streamapi.repos.OrderRepo;
 import space.gavinklfong.demo.streamapi.repos.ProductRepo;
 
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +61,22 @@ public class ServiceE1 {
             .flatMap(order -> order.getProducts().stream())
             .distinct()
             .map(ProductDTO::productToDTO)
+            .collect(Collectors.toList());
+  }
+  public Optional<ProductDTO> getCheapestBook()
+  {
+    return productRepo.findAll().stream()
+            .filter(product -> product.getCategory().equalsIgnoreCase("Books"))
+            .min(Comparator.comparing(Product::getPrice))
+            .map(ProductDTO::productToDTO);
+
+  }
+  public List<OrderDTO> getThreeMostRecentOrders()
+  {
+    return orderRepo.findAll().stream()
+            .sorted(Comparator.comparing(Order::getOrderDate).reversed())
+            .limit(3)
+            .map(OrderDTO::orderToDTO)
             .collect(Collectors.toList());
   }
 }

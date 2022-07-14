@@ -13,6 +13,7 @@ import space.gavinklfong.demo.streamapi.repos.ProductRepo;
 import space.gavinklfong.demo.streamapi.service.ServiceE1;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -51,4 +52,8 @@ public class TestController {
     public List<ProductDTO> toysList(){return serviceE1.getToysAndDiscount10();}
     @GetMapping("/ex4")
     public List<ProductDTO> distinctList(){return serviceE1.getProductsOrderedByTier2Between010221and01042021();}
+    @GetMapping("/ex5")
+    public Optional<ProductDTO> cheapestBook(){return serviceE1.getCheapestBook();}
+    @GetMapping("/ex6")
+    public List<OrderDTO> threeMostRecentOrders(){return serviceE1.getThreeMostRecentOrders();}
 }
