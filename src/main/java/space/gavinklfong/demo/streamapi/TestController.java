@@ -49,4 +49,6 @@ public class TestController {
     }
     @GetMapping("/ex3")
     public List<ProductDTO> toysList(){return serviceE1.getToysAndDiscount10();}
+    @GetMapping("/ex4")
+    public List<ProductDTO> distinctList(){return serviceE1.getProductsOrderedByTier2Between010221and01042021();}
 }
