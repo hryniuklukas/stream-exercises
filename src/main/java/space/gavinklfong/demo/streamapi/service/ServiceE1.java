@@ -38,4 +38,12 @@ public class ServiceE1 {
             .map(OrderDTO::orderToDTO)
             .collect(Collectors.toList());
   }
+  public List<ProductDTO> getToysAndDiscount10()
+  {
+    return productRepo.findAll().stream()
+            .filter(product -> product.getCategory().equalsIgnoreCase("Toys"))
+            .map(toy -> toy.withPrice(toy.getPrice()*0.9))
+            .map(ProductDTO::productToDTO)
+            .collect(Collectors.toList());
+  }
 }

@@ -47,4 +47,6 @@ public class TestController {
     {
         return serviceE1.getOrdersWithBabies();
     }
+    @GetMapping("/ex3")
+    public List<ProductDTO> toysList(){return serviceE1.getToysAndDiscount10();}
 }
