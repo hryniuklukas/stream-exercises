@@ -9,7 +9,6 @@ import space.gavinklfong.demo.streamapi.models.Product;
 import space.gavinklfong.demo.streamapi.repos.OrderRepo;
 import space.gavinklfong.demo.streamapi.repos.ProductRepo;
 
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -33,60 +32,75 @@ public class ServiceE1 {
         .map(ProductDTO::productToDTO)
         .collect(Collectors.toList());
   }
-  public List<OrderDTO> getOrdersWithBabies()
-  {
+
+  public List<OrderDTO> getOrdersWithBabies() {
     return orderRepo.findAll().stream()
         .filter(
             order ->
                 order.getProducts().stream()
                     .anyMatch(product -> product.getCategory().equalsIgnoreCase("Baby")))
-            .map(OrderDTO::orderToDTO)
-            .collect(Collectors.toList());
-  }
-  public List<ProductDTO> getToysAndDiscount10()
-  {
-    return productRepo.findAll().stream()
-            .filter(product -> product.getCategory().equalsIgnoreCase("Toys"))
-            .map(toy -> toy.withPrice(toy.getPrice()*0.9))
-            .map(ProductDTO::productToDTO)
-            .collect(Collectors.toList());
+        .map(OrderDTO::orderToDTO)
+        .collect(Collectors.toList());
   }
 
-  public List<ProductDTO> getProductsOrderedByTier2Between010221and01042021()
-  {
-    return orderRepo.findAll().stream()
-            .filter(order -> order.getCustomer().getTier()==2)
-            .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021,2,1)) >=0)
-            .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021,4,1))<=0)
-            .flatMap(order -> order.getProducts().stream())
-            .distinct()
-            .map(ProductDTO::productToDTO)
-            .collect(Collectors.toList());
-  }
-  public Optional<ProductDTO> getCheapestBook()
-  {
+  public List<ProductDTO> getToysAndDiscount10() {
     return productRepo.findAll().stream()
-            .filter(product -> product.getCategory().equalsIgnoreCase("Books"))
-            .min(Comparator.comparing(Product::getPrice))
-            .map(ProductDTO::productToDTO);
+        .filter(product -> product.getCategory().equalsIgnoreCase("Toys"))
+        .map(toy -> toy.withPrice(toy.getPrice() * 0.9))
+        .map(ProductDTO::productToDTO)
+        .collect(Collectors.toList());
+  }
 
-  }
-  public List<OrderDTO> getThreeMostRecentOrders()
-  {
+  public List<ProductDTO> getProductsOrderedByTier2Between010221and01042021() {
     return orderRepo.findAll().stream()
-            .sorted(Comparator.comparing(Order::getOrderDate).reversed())
-            .limit(3)
-            .map(OrderDTO::orderToDTO)
-            .collect(Collectors.toList());
+        .filter(order -> order.getCustomer().getTier() == 2)
+        .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021, 2, 1)) >= 0)
+        .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021, 4, 1)) <= 0)
+        .flatMap(order -> order.getProducts().stream())
+        .distinct()
+        .map(ProductDTO::productToDTO)
+        .collect(Collectors.toList());
   }
-  public List<ProductDTO> getProductsFromOrdersFromMarch15()
-  {
+
+  public Optional<ProductDTO> getCheapestBook() {
+    return productRepo.findAll().stream()
+        .filter(product -> product.getCategory().equalsIgnoreCase("Books"))
+        .min(Comparator.comparing(Product::getPrice))
+        .map(ProductDTO::productToDTO);
+  }
+
+  public List<OrderDTO> getThreeMostRecentOrders() {
+    return orderRepo.findAll().stream()
+        .sorted(Comparator.comparing(Order::getOrderDate).reversed())
+        .limit(3)
+        .map(OrderDTO::orderToDTO)
+        .collect(Collectors.toList());
+  }
+
+  public List<ProductDTO> getProductsFromOrdersFromMarch15() {
+    return orderRepo.findAll().stream()
+        .filter(order -> order.getOrderDate().isEqual(LocalDate.of(2021, 3, 15)))
+        .peek(System.out::println)
+        .flatMap(order -> order.getProducts().stream())
+        .distinct()
+        .map(ProductDTO::productToDTO)
+        .collect(Collectors.toList());
+  }
+
+  public Double getSumOfOrdersFebruary() {
+    return orderRepo.findAll().stream()
+        .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021, 2, 1)) >= 0)
+        .filter(order -> order.getOrderDate().compareTo(LocalDate.of(2021, 3, 1)) < 0)
+        .flatMap(order -> order.getProducts().stream())
+        .mapToDouble(Product::getPrice)
+        .sum();
+  }
+
+  public Double getAveragePaymentOnMarch15() {
     return orderRepo.findAll().stream()
             .filter(order -> order.getOrderDate().isEqual(LocalDate.of(2021,3,15)))
-            .peek(System.out::println)
             .flatMap(order -> order.getProducts().stream())
-            .distinct()
-            .map(ProductDTO::productToDTO)
-            .collect(Collectors.toList());
+            .mapToDouble(Product::getPrice)
+            .average().getAsDouble();
   }
 }

@@ -58,4 +58,8 @@ public class TestController {
     public List<OrderDTO> threeMostRecentOrders(){return serviceE1.getThreeMostRecentOrders();}
     @GetMapping("/ex7")
     public List<ProductDTO> getProductsFromOrdersOn15March(){return serviceE1.getProductsFromOrdersFromMarch15();}
+    @GetMapping("/ex8")
+    public Double getSumOfFebruaryOrders(){return serviceE1.getSumOfOrdersFebruary();}
+    @GetMapping("/ex9")
+    public Double getAveragePaymentMarch14(){return serviceE1.getAveragePaymentOnMarch15();}
 }
