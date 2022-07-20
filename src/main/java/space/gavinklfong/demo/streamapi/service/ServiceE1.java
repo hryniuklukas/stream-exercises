@@ -1,18 +1,16 @@
 package space.gavinklfong.demo.streamapi.service;
 
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import space.gavinklfong.demo.streamapi.dto.OrderDTO;
 import space.gavinklfong.demo.streamapi.dto.ProductDTO;
+import space.gavinklfong.demo.streamapi.models.Customer;
 import space.gavinklfong.demo.streamapi.models.Order;
 import space.gavinklfong.demo.streamapi.models.Product;
 import space.gavinklfong.demo.streamapi.repos.OrderRepo;
 import space.gavinklfong.demo.streamapi.repos.ProductRepo;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,9 +96,27 @@ public class ServiceE1 {
 
   public Double getAveragePaymentOnMarch15() {
     return orderRepo.findAll().stream()
-            .filter(order -> order.getOrderDate().isEqual(LocalDate.of(2021,3,15)))
-            .flatMap(order -> order.getProducts().stream())
-            .mapToDouble(Product::getPrice)
-            .average().getAsDouble();
+        .filter(order -> order.getOrderDate().isEqual(LocalDate.of(2021, 3, 15)))
+        .flatMap(order -> order.getProducts().stream())
+        .mapToDouble(Product::getPrice)
+        .average()
+        .getAsDouble();
+  }
+
+  public DoubleSummaryStatistics getBooksStatistics() {
+    return productRepo.findAll().stream()
+        .filter(product -> product.getCategory().equals("Books"))
+        .mapToDouble(Product::getPrice)
+        .summaryStatistics();
+  }
+
+  public Map<Long, Integer> getCountOfProductsOnOrders() {
+    return orderRepo.findAll().stream()
+        .collect(Collectors.toMap(order -> order.getId(), order -> order.getProducts().size()));
+  }
+
+  public Map<Customer, List<Order>> groupOrdersByCustomers() {
+    return orderRepo.findAll().stream()
+            .collect(Collectors.groupingBy(Order::getCustomer));
   }
 }
