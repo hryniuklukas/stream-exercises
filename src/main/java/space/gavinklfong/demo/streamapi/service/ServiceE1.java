@@ -119,4 +119,14 @@ public class ServiceE1 {
     return orderRepo.findAll().stream()
             .collect(Collectors.groupingBy(Order::getCustomer));
   }
+  public Map<OrderDTO, Double> getOrdersListWithTheirSum(){
+    return orderRepo.findAll().stream()
+            .collect(Collectors.toMap(OrderDTO::orderToDTO, order -> order.getProducts().stream().mapToDouble(Product::getPrice).sum()));
+  }
+  public Map<String, List<String>> getProductNamesByCategory(){
+    return productRepo.findAll().stream()
+            .collect(Collectors.groupingBy(
+                    Product::getCategory,
+                    Collectors.mapping(Product::getName,Collectors.toList())));
+  }
 }

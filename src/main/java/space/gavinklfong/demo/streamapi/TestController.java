@@ -96,8 +96,14 @@ public class TestController {
   public Map<Long, Integer> getNumberOfProductsOnOrders() {
     return serviceE1.getCountOfProductsOnOrders();
   }
+
   @GetMapping("/ex12")
-  public Map<Customer, List<Order>> getOrdersGroupedByCustomers(){
+  public Map<Customer, List<Order>> getOrdersGroupedByCustomers() {
     return serviceE1.groupOrdersByCustomers();
+  }
+
+  @GetMapping("/ex13")
+  public Map<OrderDTO, Double> getOrdersWithTheirSum() {
+    return serviceE1.getOrdersListWithTheirSum();
   }
 }
